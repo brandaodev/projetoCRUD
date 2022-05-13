@@ -1,0 +1,163 @@
+	<!DOCTYPE html lang="pt-br">
+
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="css/style_index.css">
+    
+        <title>Listagem de cliente</title>
+    
+        <link rel="shortcut icon" href="img/favicon-32x32.jpg" type="image/x-icon">
+    </head>
+
+    <body>
+        <header class="header">
+            <img class="logo" src="img/logo-white.png" alt="logo Virtua Brasil">
+            <span>CRUD Básico</span>
+    
+        </header>
+    
+        <main>
+            <h1>Lista de clientes</h1>
+            <div>
+                <!-- <img id="icone_cadastro" class="icone_cadastro" src="imagens/plus_icon.png" alt=""> -->
+    
+                <a href="formulario.html"><button id="icone_cadastro" class="addBtn">Cadastrar cliente</button></a>
+    
+                <!-- <p>Cadastrar cliente</p> -->
+    
+                <table id="tableClient" class="records">
+                    <thead>
+                        <tr>
+                            <th>Nome completo</th>
+                            <th>Data de nascimento</th>
+                            <th>E-mail</th>
+                            <th>WhatsApp</th>
+                        </tr>
+                    </thead>
+    
+                    <tbody>
+                
+                    </tr> 
+                    </tbody>
+    
+                </table>
+            </div>
+        </main>
+    
+        
+        
+        
+        
+        <div class="container">
+
+            <script>
+                
+                //Variáveis globais
+                var ListaClientes;
+                var corpo_tabela = document.querySelector("table tbody");
+                var cadastrarClienteBtn = document.querySelector("#icone_cadastro");
+                var editarBtn = [];
+                var removerBtn = [];
+                
+                //JSON
+                var myJSON;
+
+                //Funções
+                function carregaTabela() {
+                    ListaClientes = JSON.parse(localStorage.getItem("ListaClientes"));
+                    if (!ListaClientes){
+                        ListaClientes = {Clientes:[]};
+                    }
+                    ListaClientes.Clientes.forEach(criar_linha_cliente);
+
+                }
+
+                function criar_linha_cliente(e, i) {
+                    //criar elementos da linha do cliente
+                    var linha = document.createElement("tr");
+                    var campo_nome = document.createElement("td");
+                    var campo_data= document.createElement("td");
+                    var campo_email = document.createElement("td");
+                    var campo_whatsapp = document.createElement("td");
+                    var campo_acoes = document.createElement("td");
+                    var img_editar = document.createElement("img");
+                    var img_remover = document.createElement("img");
+                    
+
+                    //Criar o conteúdo da linha criada
+                    var text_nome = e.nome;
+                    var text_data = e.data;
+                    var text_email = e.email;
+                    var text_whatsapp = e.whatsapp;
+                    img_editar.setAttribute("src", "img/edit-icon.jpg");
+                    img_remover.setAttribute("src", "img/trash_icon.png");
+
+                    
+                    img_editar.id = e.id;
+                    img_remover.id = e.id;
+
+                    editarBtn.push(img_editar);
+                    removerBtn.push(img_remover);
+
+                    //Vincular o conteúdo aos elementos da linha criada
+                    campo_nome.innerHTML = text_nome;
+                    campo_data.innerHTML = text_data;
+                    campo_email.innerHTML = text_email;
+                    campo_whatsapp.innerHTML = text_whatsapp;
+                    campo_acoes.appendChild(img_editar);
+                    campo_acoes.appendChild(img_remover);
+                            
+                    linha.appendChild(campo_nome);
+                    linha.appendChild(campo_data);
+                    linha.appendChild(campo_email);
+                    linha.appendChild(campo_whatsapp);
+                    linha.appendChild(campo_acoes);
+                    
+                    //Vincular os elementos da linha criada ao documento
+                    corpo_tabela.appendChild(linha);               
+                }
+
+                function editarCliente(e) {
+                    e.addEventListener("click", function(){
+                        localStorage.setItem("idAcao", e.id);
+                        window.location.assign("formulario.html");
+                    });
+                }
+
+                function removerCliente(e) {
+                    e.addEventListener("click", function(){
+                        
+                        for (let i = 0; i < ListaClientes.Clientes.length; i++) {
+                            if(ListaClientes.Clientes[i].id == e.id){
+                                ListaClientes.Clientes.splice(i, 1);
+                                myJSON = JSON.stringify(ListaClientes);
+                                localStorage.setItem("ListaClientes", myJSON);
+                                break;
+                            } 
+                        }
+                        window.location.reload();
+                    });
+                    
+                }
+
+                function cadastrarCliente(event) {
+                    localStorage.setItem("idAcao", 0);
+                    window.location.assign("formulario.html");
+                }
+
+                //Rotina principal
+                window.onload = carregaTabela();
+                cadastrarClienteBtn.addEventListener("click", cadastrarCliente);
+                editarBtn.forEach(editarCliente);
+                removerBtn.forEach(removerCliente);
+
+            </script>
+        </div>
+        <footer>
+        <span>Trabalho feito por Pedro Brandão</span>
+        </footer>
+    </body>
+</html>

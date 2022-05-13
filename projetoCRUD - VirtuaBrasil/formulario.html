@@ -1,0 +1,177 @@
+<!DOCTYPE html lang="pt-br">
+<html>
+
+<head>
+    <mmeta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://kit.fontawesome.com/223ac3ea9c.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="css/style_formulario.css">
+
+    <title>Cadastro de Cliente</title>
+
+    <link rel="shortcut icon" href="img/favicon-32x32.jpg" type="image/x-icon" />
+</head>
+
+<body>
+    <main class="container">
+
+        <img src="img/logo-black-mobile.png" alt="logo da Virtua Brasil">
+        <h1>Cadastro de cliente</h1>
+        <!-- <a href="index.html"><img class="icone_casa" src="imagens/home.png" alt=""></a>
+                    <p>Página Inicial</p -->
+
+        <form action="">
+            <div class="input-field">
+                <label for="nome">nome:</label>
+                <input class="nome" name="nome" type="text" placeholder="Nome Completo" id="name" required
+                    oninvalid="this.setCustomValidity('Campo requerido')"
+                    onchange="try{setCustomValidity('')}catch(e){}" />
+                <div class="underline"></div>
+            </div>
+
+            <div class="input-field">
+                <label for="data">data: </label>
+                <input class="data" type="text" name="data" placeholder="Data de Nascimento"
+                    onfocus="(this.type='date')" onblur="(this.type='date')" id="date" required
+                    oninvalid="this.setCustomValidity('Campo requerido')"
+                    onchange="try{setCustomValidity('')}catch(e){}" />
+                <div class="underline"></div>
+            </div>
+
+            <div class="input-field">
+                <label for="email">email: </label>
+                <input class="email" name="email" type="email" id="email" placeholder="E-mail" required
+                    oninvalid="this.setCustomValidity('Campo requerido')"
+                    onchange="try{setCustomValidity('')}catch(e){}" />
+                <div class="underline"></div>
+            </div>
+
+            <div class="input-field">
+                <label for="whatsapp">whatsapp: </label>
+                <input class="whatsapp" name="whatsapp" type="tel" placeholder="WhatsApp" id="whatsapp" required
+                    oninvalid="this.setCustomValidity('Campo requerido')"
+                    onchange="try{setCustomValidity('')}catch(e){}" />
+                <div class="underline"></div>
+            </div>
+
+            <a href="index.html"><input class="confirmarBtn" type="submit" value="Confirmar"></a>
+        </form>
+        <div class="social-media">
+            <span>Siga-nos nas redes sociais</span>
+            <div class="social-icons">
+                <div class="social-twitter">
+                    <a href="https://twitter.com/VirtuaBrasilBR" target="_blank" rel="link twitter virtua brasil">
+                        <i class="fab fa-twitter-square"></i>
+                    </a>
+                </div>
+                <div class="social-facebook">
+                    <a href="https://www.facebook.com/virtuabrasil/" target="_blank" rel="link facebook virtua brasil">
+                        <i class="fab fa-facebook-square"></i>
+                    </a>
+                </div>
+                <div class="social-instagram">
+                    <a href="https://www.instagram.com/virtuabrasil/" target="_blank"
+                        rel="link instagram virtua brasil">
+                        <i class="fab fa-instagram-square"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </main>
+    <script>
+
+        //Variáveis Globais - HTML
+        var campo_nome = document.querySelector("input.nome");
+        var campo_data = document.querySelector("input.data");
+        var campo_email = document.querySelector("input.email");
+        var campo_whatsapp = document.querySelector("input.whatsapp")
+        var botao_confirmar = document.querySelector("input.confirmarBtn");
+
+        var idAcao = Number(localStorage.getItem("idAcao"));
+
+
+        //Sequencia
+        var clientesSeq = Number(localStorage.getItem("clientesSeq"));
+        if (!clientesSeq) {
+            clientesSeq = 0;
+        }
+
+        //Objetos
+        var ListaClientes = JSON.parse(localStorage.getItem("ListaClientes"));
+        if (!ListaClientes) {
+            ListaClientes = { Clientes: [] };
+        }
+
+        //JSON
+        var myJSON;
+
+
+        function verificaDados(event) {
+            campo_data.value = campo_data.value.trim();
+            if (campo_nome.value == "" || campo_data.value == "" || campo_email.value == "" || campo_whatsapp.value == "") {
+                alert("Dados Inválidos! Tente Novamente.");
+            }
+            else {
+                armazenarDados(event);
+            }
+        }
+
+        function armazenarDados(event) {
+            event.preventDefault();
+            //Adiciona ou modifica um aluno de ListaClientes
+            if (idAcao == 0) {
+                clientesSeq += 1;
+                ListaClientes.Clientes.push({ nome: campo_nome.value, data: campo_data.value, email: campo_email.value, whatsapp: campo_whatsapp.value, id: clientesSeq });
+            }
+            else {
+                ListaClientes.Clientes.forEach(e => {
+                    if (e.id == idAcao) {
+                        var indice = ListaClientes.Clientes.indexOf(e);
+                        ListaClientes.Clientes.splice(indice, 1, { nome: campo_nome.value, data: campo_data.value, email: campo_email.value, whatsapp: campo_whatsapp.value, id: idAcao });
+                    }
+                });
+            }
+            myJSON = JSON.stringify(ListaClientes);
+            localStorage.setItem("ListaClientes", myJSON);
+            localStorage.setItem("clientesSeq", clientesSeq);
+            window.location.assign("index.html");
+        }
+
+        function preencheCamposEditar() {
+            if (idAcao != 0) {
+                var valorNome;
+                var valorData;
+                var valorEmail;
+                var valorWhatsapp;
+                ListaClientes.Clientes.forEach(e => {
+                    if (e.id == idAcao) {
+                        valorNome = e.nome;
+                        valorData = e.data;
+                        valorEmail = e.email;
+                        valorWhatsapp = e.whatsapp;
+                    }
+                });
+                campo_nome.setAttribute("value", valorNome);
+                campo_data.setAttribute("value", valorData);
+                campo_email.setAttribute("value", valorEmail);
+                campo_whatsapp.setAttribute("value", valorWhatsapp);
+            }
+        }
+
+        //Rotina Principal
+
+        window.onload = preencheCamposEditar();
+
+
+
+
+        botao_confirmar.addEventListener("click", verificaDados);
+
+
+
+    </script>
+</body>
+
+</html>

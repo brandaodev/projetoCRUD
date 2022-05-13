@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+header{
+    display: flex;
+    padding: 50px;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #3a3a3a;
+}
+
+.logo{
+    width: 20vw;
+}
+
+span{
+    font-size: 12px;
+    font-weight: 100;
+    color: white;
+}
+
+main{
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+}
+
+h1{
+    font-size: 30px;
+    padding-left: 10px;
+    margin-bottom: 30px;
+}
+
+
+
+.addBtn{
+    padding: 15px;
+    background: black;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    letter-spacing: 1px;
+}
+
+.addBtn:hover{
+    background: #3a3a3a;
+}
+
+
+
+
+.records {
+    width: 100%;
+    user-select: none;
+    text-align: left;
+}
+
+
+.records th {
+    height: 100px;
+    padding-left: 20px;
+    font-size: 1.2rem;
+}
+
+.records td {
+    height: 50px;
+    padding-left: 20px;
+}
+
+.records th:last-child,
+.records td:last-child {
+    padding: 0;
+    min-width: 140px;
+    text-align: center;
+}
+
+img{
+    cursor: pointer;
+    width: 20px;
+}
+
+footer{
+    display: flex;
+    border-top: 1px solid #333;
+    bottom: 0;
+
+    height: 40px;
+    position: fixed;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+footer span{
+    color:#3a3a3a;
+}
